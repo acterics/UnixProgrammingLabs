@@ -3,8 +3,58 @@ import os
 import argparse
 import glob
 import collections
-from path_type import PathType
-from sys import stdin, stdout
+from argparse import ArgumentTypeError as err
+from sys import stdin
+
+
+class PathType(object):
+
+    FILE_TYPE = 'file'
+    DIR_TYPE = 'dir'
+
+    def __init__(self, exists=True, type=FILE_TYPE):
+        assert exists in (True, False, None)
+        assert type in (
+            PathType.FILE_TYPE,
+            PathType.DIR_TYPE,
+            None
+        ) or hasattr(type, '__call__')
+
+        self.exists = exists
+        self.type = type
+
+    def __call__(self, string):
+        is_exist = os.path.exists(string)
+        if self.exists is True:
+            if not is_exist:
+                raise err("Path does not exist: '{path}'".format(path=string))
+            elif (self.type == PathType.FILE_TYPE and
+                  not os.path.isfile(string)):
+                raise err(
+                    "Path does not a file: '{path}'".format(path=string)
+                )
+            elif self.type == PathType.DIR_TYPE and not os.path.isdir(string):
+                raise err(
+                    "Path does not a directory: '{path}'".format(path=string)
+                )
+        else:
+            if self.exists is False and is_exist:
+                raise err("Path exists: '{path}'".format(path=string))
+            parent_directory = os.path.dirname(os.path.normpath(string)) or '.'
+            if not os.path.isdir(parent_directory):
+                raise err(
+                    "Parent path is not a directory: '{path}'".format(
+                        path=string
+                    )
+                )
+            elif not os.path.exists(parent_directory):
+                raise err(
+                    "Parent directory does not a exists: '{path}'".format(
+                        path=string
+                    )
+                )
+        return string
+
 
 SCRIPT_DESCRIPTION = ('Find files with with suffix in given catalog '
                       'and write them in specified file, sorted by size.')
@@ -39,8 +89,8 @@ result_file_name = stdin.readline()
 
 result_file = open(result_file_name, "w")
 
-for file_tuple in ordered_files:
+for file in map(lambda file_tuple: file_tuple[1], ordered_files):
     result_file.write("{filename}\n".format(
-        filename=os.path.basename(file_tuple[1])
+        filename=os.path.basename(file)
     ))
 result_file.close()
