@@ -3,8 +3,8 @@ import os
 import argparse
 import glob
 import shutil
+import sys
 from argparse import ArgumentTypeError as err
-from sys import stdin
 
 
 class PathType(object):
@@ -65,8 +65,9 @@ parser.add_argument('source_path',
                     help='Source directory for files should copy'
                     )
 parser.add_argument('destination_path',
-                    PathType(exists=True, type=PathType.DIR_TYPE),
-                    help='Destination directory for files filtered files')
+                    type=PathType(exists=True, type=PathType.DIR_TYPE),
+                    help='Destination directory for files filtered files'
+                    )
 
 args = parser.parse_args()
 source_path = os.path.abspath(args.source_path)
@@ -79,10 +80,10 @@ if source_path == destination_path:
                    destination_path=destination_path
     )
     print(message)
-    return 1
+    sys.exit(1)
 
 print("Please, enter max file size (KB): ", end=' ', flush=True)
-max_size = stdin.readline()
+max_size = sys.stdin.readline()
 
 print("Searching files greater then {max_size} KB...".format(
     max_size=max_size)
@@ -93,30 +94,35 @@ source_files = [(os.path.getsize(file), file) for file in glob.iglob(
     recursive=False)
 ]
 
-max_size_bytes = max_size * 1024
+
+max_size_bytes = int(max_size) * 1024
 
 result_files = filter(
     lambda file_tuple: file_tuple[0] > max_size_bytes,
     source_files
 )
 
+
 if not result_files:
     print("No files greater then {max_size} KB found.".format(
         max_size=max_size)
     )
-    return 0
+    sys.exit()
 
-print("Copying to {destination_path}".format(
+print("Copying to {destination_path}...".format(
     destination_path=destination_path)
 )
 
 total_bytes = 0
+total_count = 0
 for file_tuple in result_files:
-    shutil.copyfile(os.path.abspath(file_tuple[1]), destination_path)
+    print(file_tuple[1])
+    shutil.copy2(file_tuple[1], destination_path)
     total_bytes += file_tuple[0]
+    total_count += 1
 
 total_size = total_bytes / 1024
 
 print("Copied successfully.")
-print("Total files count: {count}".format(count=size(result_files)))
+print("Total files count: {count}".format(count=total_count))
 print("Total files size: {size} KB".format(size=total_size))
