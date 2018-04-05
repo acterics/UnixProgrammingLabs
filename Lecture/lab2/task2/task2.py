@@ -98,13 +98,13 @@ source_files = [(os.path.getsize(file), file) for file in glob.iglob(
 max_size_bytes = int(max_size) * 1024
 
 result_files = filter(
-    lambda file_tuple: file_tuple[0] > max_size_bytes,
+    lambda file_tuple: file_tuple[0] < max_size_bytes,
     source_files
 )
 
 
 if not result_files:
-    print("No files greater then {max_size} KB found.".format(
+    print("No files less then {max_size} KB found.".format(
         max_size=max_size)
     )
     sys.exit()
