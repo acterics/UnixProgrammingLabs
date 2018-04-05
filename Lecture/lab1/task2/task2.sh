@@ -29,7 +29,7 @@ fi
 let "MAX_SIZE_BYTES = $MAX_SIZE * 1024"
 
 echo "Searching files greater then $MAX_SIZE KB..."
-RESULT_FILES=`find $SOURCE_PATH -type f -size +"$MAX_SIZE_BYTES"c`
+RESULT_FILES=`find $SOURCE_PATH -type f -size -"$MAX_SIZE_BYTES"c`
 
 if [[ -z $RESULT_FILES ]] ; then
     echo "No files greater then $MAX_SIZE_BYTES KB found."
