@@ -6,7 +6,7 @@
     {
       "label": "run task1",
       "type": "shell",
-      "command": "echo result.data | ./task1/task1.py ./ .py",
+      "command": "./task1/test/task1_test.sh",
       "problemMatcher": []
     },
     {
