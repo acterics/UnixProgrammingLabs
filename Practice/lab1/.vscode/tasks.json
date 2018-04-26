@@ -13,7 +13,7 @@
         {
             "label": "run",
             "type": "shell",
-            "command": "gradle run",
+            "command": "gradle runProject --stacktrace",
             "group": "none",
             "problemMatcher": []
         }

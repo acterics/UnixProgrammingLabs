@@ -1,0 +1,28 @@
+apply plugin: 'kotlin'
+apply plugin: 'java'
+
+def rootExt = rootProject.extensions.getByName('ext')
+
+
+sourceSets {
+    main.java.srcDirs += 'src/main/kotlin/'
+    test.java.srcDirs += 'src/test/kotlin/'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    testCompile 'junit:junit:4.11'
+    testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'com.acterics.unix.lab1.consumer.MainKt'
+    }
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+}
+
