@@ -12,6 +12,8 @@
 
 Скрипт для завантаження залежностей: `./scripts/install.sh`
 
+
 Скрипт для компіляції Protobuf сирців: `./scripts/compile-proto.sh`
+Перед компіляцією потрібно встановити компілятор protobuf `sudo apt install protobuf-compiler`
 
 Запуск програми: `./venv/bin/python ./src/main.py`
