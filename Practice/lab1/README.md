@@ -9,7 +9,9 @@
 ## Скрипти
 
 Скрипт для розгортання venv: `./scripts/init-venv.sh`
+
 Скрипт для завантаження залежностей: `./scripts/install.sh`
+
 Скрипт для компіляції Protobuf сирців: `./scripts/compile-proto.sh`
 
 Запуск програми: `./venv/bin/python ./src/main.py`
