@@ -1,6 +1,7 @@
-**/build
-**/bin
-/.gradle
-**/.settings
-**/.classpath
-**/.project
+venv/
+__pycache__/
+*.pyc
+.env
+*.log
+*.sqlite3
+*/*/migrations
