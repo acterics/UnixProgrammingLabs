@@ -7,7 +7,10 @@ import os
 import base64
 import time
 from pathlib import Path
-from generated.protobuf.auth_data_pb2 import AuthenticationRequest, AuthenticationRespose, UserData
+from generated.protobuf.auth_data_pb2 import (
+    AuthenticationRequest, AuthenticationRespose,
+    UserData, AuthenticationState
+)
 
 
 class AuthTCPServer(socketserver.TCPServer):
@@ -30,7 +33,7 @@ class AuthRequestHandler(socketserver.StreamRequestHandler):
         self.close_connection = 1
         self.handle_authorization()
         while not self.close_connection:
-            self.handle_authorization()
+            self.handle_message()
 
     def handle_authorization(self):
         try:
@@ -40,6 +43,16 @@ class AuthRequestHandler(socketserver.StreamRequestHandler):
             self.log_message("Start authenticate user: %s",
                              auth_request.username)
             self.authenticate_user(auth_request)
+        except socket.timeout as e:
+            self.log_error("Request timed out: %r", e)
+            self.close_connection = 1
+            return
+
+    def handle_message(self):
+        try:
+            raw_request = self.rfile.read()
+            self.log_message("Get %s", raw_request)
+            self.close_connection = 1
         except socket.timeout as e:
             self.log_error("Request timed out: %r", e)
             self.close_connection = 1
@@ -56,6 +69,8 @@ class AuthRequestHandler(socketserver.StreamRequestHandler):
                           format % args))
 
     def authenticate_user(self, auth_request):
+        user_file = ''
+        self.log_message(str(auth_request))
         try:
             user_data_path = Path("{users_path}/{username}.data".format(
                 users_path=self.users_directory_path,
@@ -70,17 +85,40 @@ class AuthRequestHandler(socketserver.StreamRequestHandler):
             user_file = user_data_path.open(mode='rb')
             user_data = UserData()
             user_data.ParseFromString(user_file.read())
-            user_data.auth_expires
+            user_file.close()
+            user_file = user_data_path.open(mode='wb')
             if user_data.password == auth_request.password:
+                user_data.auth_expires = int(time.time()) + self.auth_timeout
+                user_data.tries = 3
+                user_file.write(user_data.SerializeToString())
+                user_file.close()
+                self.close_connection = 0
                 self.log_message("Success authorization")
+                return
             else:
-                self.log_error("Unsuccessful authorization")
+                if user_data.tries <= 1:
+                    user_data.tries = 3
+                    user_file.write(user_data.SerializeToString())
+                    user_file.close()
+                    self.log_error("Unsuccessful authorization. User banned")
+                    self.ban_user(auth_request)
+                else:
+                    user_data.tries -= 1
+                    user_file.write(user_data.SerializeToString())
+                    user_file.close()
+                    self.log_error("Unsuccessful authorization. {tries} tries remain".format(
+                        tries=user_data.tries
+                    ))
+
         except Exception as e:
             self.log_error("Request timed out: %r", e)
             self.close_connection = 1
         finally:
             if user_file:
                 user_file.close()
+
+    def ban_user(self, auth_request):
+        pass
 
 
 PORT = 8000

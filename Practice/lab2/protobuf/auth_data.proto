@@ -13,18 +13,12 @@ message AuthenticationRespose {
 }
 
 message AuthenticationState {
-    enum State {
-        AUTHORIZED = 0;
-        NOT_AUTHORIZED = 1;
-        BANNED = 2;
-    }
-
     required bool is_banned = 1 [default = false];
-    optional int64 ban_expires_in = 3;
-    optional int32 tries = 4 [default = 3];
+    optional int64 ban_expires_in = 2;
 }
 
 message UserData {
     required string password = 1;
     optional int64 auth_expires = 2;
+    optional int32 tries = 3 [default = 3];
 }

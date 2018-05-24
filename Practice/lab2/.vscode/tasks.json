@@ -22,6 +22,18 @@
             "problemMatcher": []
         },
         {
+            "label": "install requirements",
+            "type": "shell",
+            "command": "./scripts/install-requirements.sh",
+            "problemMatcher": []
+        },
+        {
+            "label": "install venv",
+            "type": "shell",
+            "command": "./scripts/install-venv.sh",
+            "problemMatcher": []
+        },
+        {
             "label": "new user",
             "type": "shell",
             "command": "./venv/bin/python ./src/sign_up_user.py",
