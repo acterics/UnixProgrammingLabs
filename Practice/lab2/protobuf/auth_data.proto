@@ -24,3 +24,7 @@ message AuthenticationState {
     optional int64 ban_expires_in = 3;
     optional int32 tries = 4 [default = 3];
 }
+
+message UserData {
+    required string password = 1;
+}
