@@ -14,7 +14,7 @@ message AuthenticationRespose {
 
 message AuthenticationState {
     required bool is_banned = 1 [default = false];
-    optional int64 ban_expires_in = 2;
+    optional int64 ban_expires = 2;
 }
 
 message UserData {
