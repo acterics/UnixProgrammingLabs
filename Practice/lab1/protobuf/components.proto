@@ -1,0 +1,13 @@
+syntax = "proto2";
+
+message BrokerMessage {
+
+    enum CigaretteType {
+        TOBACCO = 0;
+        PAPER = 1;
+        MATCHES = 2;
+    }
+    repeated CigaretteType components = 1;
+    optional string payload = 2;
+}
+

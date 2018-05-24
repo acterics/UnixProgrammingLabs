@@ -1,0 +1,13 @@
+{
+    "python.pythonPath": "${workspaceFolder}/venv/bin/python",
+    "python.linting.ignorePatterns": [
+        ".vscode/*.py",
+        "**/site-packages/**/*.py",
+        "**/src/generated/**"
+    ],
+    "python.linting.pylintPath": "${workspaceFolder}/venv/bin/pylint",
+    "python.linting.pylintEnabled": true,
+    "python.linting.pylintArgs": [
+        "--disable=E0401"
+    ],
+}
