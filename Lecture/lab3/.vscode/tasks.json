@@ -4,9 +4,15 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "run",
+            "label": "run task1",
             "type": "shell",
             "command": "./task1/task1.sh",
+            "problemMatcher": []
+        },
+        {
+            "label": "run task2",
+            "type": "shell",
+            "command": "./task2/task2.sh",
             "problemMatcher": []
         }
     ]
