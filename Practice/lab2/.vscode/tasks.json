@@ -6,13 +6,25 @@
         {
             "label": "run client",
             "type": "shell",
-            "command": "python ./src/client.py",
+            "command": "./venv/bin/python ./src/client.py",
             "problemMatcher": []
         },
         {
             "label": "run server",
             "type": "shell",
-            "command": "python ./src/server.py",
+            "command": "./venv/bin/python ./src/server.py",
+            "problemMatcher": []
+        },
+        {
+            "label": "compile protobuf",
+            "type": "shell",
+            "command": "./scripts/compile-protobuf.sh",
+            "problemMatcher": []
+        },
+        {
+            "label": "new user",
+            "type": "shell",
+            "command": "./venv/bin/python ./src/sign_up_user.py",
             "problemMatcher": []
         }
     ]
