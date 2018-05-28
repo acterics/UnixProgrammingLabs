@@ -1,0 +1,5 @@
+/venv/
+/**/*.pyc
+/src/generated/*
+/res/users/*.data
+/res/ips/*.data

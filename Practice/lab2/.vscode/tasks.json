@@ -1,0 +1,43 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "run client",
+            "type": "shell",
+            "command": "./venv/bin/python ./src/client.py",
+            "problemMatcher": []
+        },
+        {
+            "label": "run server",
+            "type": "shell",
+            "command": "./venv/bin/python ./src/server.py",
+            "problemMatcher": []
+        },
+        {
+            "label": "compile protobuf",
+            "type": "shell",
+            "command": "./scripts/compile-protobuf.sh",
+            "problemMatcher": []
+        },
+        {
+            "label": "install requirements",
+            "type": "shell",
+            "command": "./scripts/install-requirements.sh",
+            "problemMatcher": []
+        },
+        {
+            "label": "install venv",
+            "type": "shell",
+            "command": "./scripts/install-venv.sh",
+            "problemMatcher": []
+        },
+        {
+            "label": "new user",
+            "type": "shell",
+            "command": "./venv/bin/python ./src/sign_up_user.py",
+            "problemMatcher": []
+        }
+    ]
+}

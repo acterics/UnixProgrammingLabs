@@ -1,0 +1,24 @@
+syntax = "proto2";
+
+package authentication;
+
+message AuthenticationRequest {
+    required string username = 1;
+    required string password = 2;
+}
+
+message AuthenticationRespose {
+    required bool success = 1;
+    required string message = 2;
+}
+
+message AuthenticationState {
+    required bool is_banned = 1 [default = false];
+    optional int64 ban_expires = 2;
+}
+
+message UserData {
+    required string password = 1;
+    optional int64 auth_expires = 2;
+    optional int32 tries = 3 [default = 3];
+}
